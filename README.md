@@ -1,5 +1,5 @@
 Project Structure
-Copy code
+
 ├── pom.xml                    # Maven dependencies
 ├── src/
 │   └── test/
