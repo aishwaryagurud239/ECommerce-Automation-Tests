@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon ECommerce Test Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Amazon ECommerce Test Report</h1>
+    <h2>Test Summary</h2>
+    <p>Total Tests: 10</p>
+    <p>Passed: 9</p>
+    <p>Failed: 1</p>
+    <p>Skipped: 0</p>
+
+    <h2>Test Cases</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Test Case ID</th>
+                <th>Description</th>
+                <th>Preconditions</th>
+                <th>Test Steps</th>
+                <th>Expected Result</th>
+                <th>Actual Result</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>TC_001</td>
+                <td>Search and add a product to the cart</td>
+                <td>User is logged in to the system</td>
+                <td>1. Search for "laptop".<br>2. Select the first product.<br>3. Add the product to the cart.</td>
+                <td>The product should be added to the cart successfully.</td>
+                <td>The product was added to the cart successfully.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_002</td>
+                <td>Login with Valid Credentials</td>
+                <td>None</td>
+                <td>1. Open the login page.<br>2. Enter valid email and password.<br>3. Click "Login".</td>
+                <td>User should be logged in successfully.</td>
+                <td>User logged in successfully.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_003</td>
+                <td>Login with Invalid Credentials</td>
+                <td>None</td>
+                <td>1. Open the login page.<br>2. Enter invalid email or password.<br>3. Click "Login".</td>
+                <td>An error message should be displayed indicating invalid credentials.</td>
+                <td>Error message "Your email or password was incorrect" is displayed.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_004</td>
+                <td>UI Verification</td>
+                <td>None</td>
+                <td>1. Open the homepage.<br>2. Check presence of key UI elements.</td>
+                <td>UI elements should be displayed correctly.</td>
+                <td>UI elements are displayed correctly.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_005</td>
+                <td>Form Validation for Account Creation</td>
+                <td>None</td>
+                <td>1. Open the account creation page.<br>2. Fill out the form with invalid data.<br>3. Submit the form.</td>
+                <td>Error messages should be displayed for invalid inputs.</td>
+                <td>Error messages displayed as expected.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_006</td>
+                <td>Add Multiple Products to Cart</td>
+                <td>User is logged in to the system</td>
+                <td>1. Search for "headphones".<br>2. Select the first product.<br>3. Add it to the cart.<br>4. Search for "smartphone".<br>5. Add it to the cart.</td>
+                <td>Both products should be added to the cart.</td>
+                <td>Both products were added successfully.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_007</td>
+                <td>Checkout Process</td>
+                <td>User has items in the cart</td>
+                <td>1. Go to the cart.<br>2. Click on "Proceed to checkout".<br>3. Enter shipping information.<br>4. Review the order.</td>
+                <td>Order review page should display correct items and total cost.</td>
+                <td>Order review displayed correctly.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_008</td>
+                <td>Search for a Non-Existent Product</td>
+                <td>None</td>
+                <td>1. Search for a product that does not exist (e.g., "xyzabc").</td>
+                <td>No results found message should be displayed.</td>
+                <td>No results found message was displayed.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_009</td>
+                <td>Verify Footer Links</td>
+                <td>None</td>
+                <td>1. Open the homepage.<br>2. Click on various footer links.</td>
+                <td>All footer links should navigate to the correct pages.</td>
+                <td>All footer links worked as expected.</td>
+                <td>Passed</td>
+            </tr>
+            <tr>
+                <td>TC_010</td>
+                <td>Check Product Reviews</td>
+                <td>None</td>
+                <td>1. Search for a product.<br>2. Click on the product.<br>3. Navigate to the reviews section.</td>
+                <td>Product reviews should be displayed.</td>
+                <td>Product reviews displayed correctly.</td>
+                <td>Passed</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
