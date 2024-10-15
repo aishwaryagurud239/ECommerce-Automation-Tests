@@ -10,6 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+import java.time.Duration;
+
 public class ECommerceTests {
     WebDriver driver;
 
@@ -18,60 +20,67 @@ public class ECommerceTests {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get("https://www.inmotionhosting.com/"); // Update with the actual e-commerce site URL
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // Add implicit wait
+        driver.get("https://www.amazon.com/"); // Amazon site
     }
 
     @Test(priority = 1)
     public void searchForProductAndAddToCart() {
-        WebElement searchBox = driver.findElement(By.name("q"));
-        searchBox.sendKeys("web hosting");
-        driver.findElement(By.id("search-button")).click();
+        WebElement searchBox = driver.findElement(By.id("twotabsearchtextbox"));
+        searchBox.sendKeys("laptop");
+        driver.findElement(By.id("nav-search-submit-button")).click();
 
-        // Assuming there's an "Add to cart" button on the product page
-        WebElement firstProduct = driver.findElement(By.xpath("(//button[@class='add-to-cart'])[1]"));
+        // Assuming there is an 'Add to cart' button for the first product
+        WebElement firstProduct = driver.findElement(By.xpath("(//div[@data-component-type='s-search-result'])[1]//h2/a"));
         firstProduct.click();
 
-        WebElement cartCount = driver.findElement(By.id("cart-count"));
-        Assert.assertEquals(cartCount.getText(), "1", "Product was not added to the cart");
+        WebElement addToCartButton = driver.findElement(By.id("add-to-cart-button"));
+        addToCartButton.click();
+
+        // Validate the cart count increased
+        WebElement cartCount = driver.findElement(By.id("nav-cart-count"));
+        Assert.assertTrue(Integer.parseInt(cartCount.getText()) > 0, "Product was not added to the cart");
     }
 
     @Test(priority = 2)
     public void proceedToCheckout() {
-        WebElement cart = driver.findElement(By.id("cart"));
+        WebElement cart = driver.findElement(By.id("nav-cart"));
         cart.click();
 
-        WebElement checkoutButton = driver.findElement(By.id("checkout-button"));
-        checkoutButton.click();
+        WebElement proceedToCheckoutButton = driver.findElement(By.name("proceedToRetailCheckout"));
+        proceedToCheckoutButton.click();
 
         Assert.assertTrue(driver.getTitle().contains("Checkout"), "Checkout page was not displayed");
     }
 
     @Test(priority = 3)
     public void loginWithValidCredentials() {
-        driver.findElement(By.id("login-link")).click();
-        driver.findElement(By.id("email")).sendKeys("valid-email@example.com");
-        driver.findElement(By.id("password")).sendKeys("validpassword");
-        driver.findElement(By.id("login-button")).click();
+        driver.findElement(By.id("nav-link-accountList")).click();
+        driver.findElement(By.id("ap_email")).sendKeys("agurud@gmail.com");
+        driver.findElement(By.id("continue")).click();
+        driver.findElement(By.id("ap_password")).sendKeys("rascal@123");
+        driver.findElement(By.id("signInSubmit")).click();
 
-        Assert.assertTrue(driver.findElement(By.id("logout-link")).isDisplayed(), "Login failed with valid credentials");
+        Assert.assertTrue(driver.findElement(By.id("nav-link-accountList")).getText().contains("Account"), "Login failed with valid credentials");
     }
 
     @Test(priority = 4)
     public void loginWithInvalidCredentials() {
-        driver.findElement(By.id("login-link")).click();
-        driver.findElement(By.id("email")).sendKeys("invalid-email@example.com");
-        driver.findElement(By.id("password")).sendKeys("invalidpassword");
-        driver.findElement(By.id("login-button")).click();
+        driver.findElement(By.id("nav-link-accountList")).click();
+        driver.findElement(By.id("ap_email")).sendKeys("invalid-email@example.com");
+        driver.findElement(By.id("continue")).click();
+        driver.findElement(By.id("ap_password")).sendKeys("invalidpassword");
+        driver.findElement(By.id("signInSubmit")).click();
 
-        WebElement errorMessage = driver.findElement(By.id("error-message"));
+        WebElement errorMessage = driver.findElement(By.xpath("//span[contains(text(),'Your password is incorrect')]"));
         Assert.assertTrue(errorMessage.isDisplayed(), "Error message not displayed for invalid credentials");
     }
 
     @Test(priority = 5)
     public void verifyUIElements() {
-        WebElement searchBar = driver.findElement(By.name("q"));
-        WebElement navigationMenu = driver.findElement(By.id("nav"));
-        WebElement footer = driver.findElement(By.id("footer"));
+        WebElement searchBar = driver.findElement(By.id("twotabsearchtextbox"));
+        WebElement navigationMenu = driver.findElement(By.id("nav-main"));
+        WebElement footer = driver.findElement(By.id("navFooter"));
 
         Assert.assertTrue(searchBar.isDisplayed(), "Search bar is not displayed");
         Assert.assertTrue(navigationMenu.isDisplayed(), "Navigation menu is not displayed");
@@ -80,20 +89,24 @@ public class ECommerceTests {
 
     @Test(priority = 6)
     public void formValidation() {
-        driver.findElement(By.id("contact-us-link")).click();
-        WebElement nameField = driver.findElement(By.id("name"));
-        WebElement emailField = driver.findElement(By.id("email"));
-        WebElement submitButton = driver.findElement(By.id("submit"));
+        driver.findElement(By.id("nav-link-accountList")).click();
+        driver.findElement(By.id("createAccountSubmit")).click();
 
-        nameField.sendKeys(""); // Leave name empty to trigger validation
+        WebElement nameField = driver.findElement(By.id("ap_customer_name"));
+        WebElement emailField = driver.findElement(By.id("ap_email"));
+        WebElement passwordField = driver.findElement(By.id("ap_password"));
+        WebElement submitButton = driver.findElement(By.id("continue"));
+
+        nameField.clear(); // Leave name empty to trigger validation
         emailField.sendKeys("invalid-email"); // Invalid email format
+        passwordField.sendKeys("123"); // Weak password
         submitButton.click();
 
-        WebElement nameError = driver.findElement(By.id("name-error"));
-        WebElement emailError = driver.findElement(By.id("email-error"));
+        WebElement emailError = driver.findElement(By.xpath("//div[contains(text(),'Enter a valid email')]"));
+        WebElement passwordError = driver.findElement(By.xpath("//div[contains(text(),'minimum of 6 characters')]"));
 
-        Assert.assertTrue(nameError.isDisplayed(), "Name field validation failed");
-        Assert.assertTrue(emailError.isDisplayed(), "Email field validation failed");
+        Assert.assertTrue(emailError.isDisplayed(), "Email validation failed");
+        Assert.assertTrue(passwordError.isDisplayed(), "Password validation failed");
     }
 
     @AfterClass
